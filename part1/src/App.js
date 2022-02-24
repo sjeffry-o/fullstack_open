@@ -6,18 +6,22 @@ const Header = (data) => {
 	)
 }
 
-const Content = (data) => {
+const Part = (data) => {
 	return (
 	<div>
 	      <p>
-		{data.part1} {data.exercises1}
+		{data.part} {data.exercises}
 	      </p>
-	      <p>
-		{data.part2} {data.exercises2}
-	      </p>
-	      <p>
-		{data.part3} {data.exercises3}
-	      </p>
+	</div>
+	)
+}
+
+const Content = (data) => {
+	return (
+	<div>
+      		<Part part={data.part1} exercises={data.exercises1} />
+      		<Part part={data.part2} exercises={data.exercises2} />
+      		<Part part={data.part3} exercises={data.exercises3} />
 	</div>
 	)
 }
