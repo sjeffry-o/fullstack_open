@@ -1,68 +1,43 @@
-const Header = (data) => {
-	console.log(data)
-	return (
-	<div>
-      		<h1>{data.course}</h1>
-	</div>
-	)
-}
-
-const Part = (data) => {
-	return (
-	<div>
-	      <p>
-		{data.part} {data.exercises}
-	      </p>
-	</div>
-	)
-}
-
-const Content = (data) => {
-	return (
-	<div>
-      		<Part part={data.part1.name} exercises={data.part1.exercises} />
-      		<Part part={data.part2.name} exercises={data.part2.exercises} />
-      		<Part part={data.part3.name} exercises={data.part3.exercises} />
-	</div>
-	)
-}
-
-const Total = (data) => {
-	return (
-	<div>
-      	      <p>Number of exercises {data.exercises1 + data.exercises2 + data.exercises3}</p>
-	</div>
-	)
-}
+import {useState} from 'react'
 
 const App = () => {
-  const course = {
-  name: 'Half Stack application development',
-  parts: [
-  {
-    name: 'Fundamentals of React',
-    exercises: 10
-  },
-  {
-    name: 'Using props to pass data',
-    exercises: 7
-  },
-  {
-    name: 'State of a component',
-    exercises: 14
-  }
-  ]
-  }
+	const [counter, setCounter] = useState(0)
 
-  return (
-    <div>
-      <Header course={course.name} />
-      <Content part1={course.parts[0]} part2={course.parts[1]} part3={course.parts[2]}/>
-      <Total exercises1={course.parts[0].exercises} 
-	     exercises2={course.parts[1].exercises} 
-             exercises3={course.parts[2].exercises} />
-    </div>
-  )
+	/*setTimeout(
+		() => setCounter(counter + 1),
+		1000
+	)*/
+
+	/*const handleClick = () => {
+		console.log('clicked')
+	}*/
+
+	const Display = ({counter}) => {
+		return (
+			<div>{counter}</div>
+		)
+	}
+	const Button = ({onclick, text}) => {
+		return (
+			 <button onClick={onclick}>
+			  {text}
+			 </button>
+		)
+	}
+	const increaseByOne = () => setCounter(counter + 1)
+	const resetToZero = () => setCounter(0)
+	const decreaseByTwo = () => setCounter(counter - 2)
+
+	//console.log("rendering", counter)
+
+	return (
+	<div>
+		<Display counter={counter} />
+		<Button onclick={increaseByOne} text={'plus'} />
+		<Button onclick={resetToZero} text={'reset'} />
+		<Button onclick={decreaseByTwo} text={'minus two'} />
+	</div>
+	)
 }
 
 export default App
