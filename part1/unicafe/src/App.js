@@ -19,13 +19,13 @@ const DisplayStat = (props) => {
 }
 
 const All_Stat = ( {good, neutral, bad} ) => {
-	return (good - bad)
+	return (good + neutral + bad)
 }
 const AVG_Stat = ( {good, neutral, bad} ) => {
-	return (All_Stat({good, neutral, bad}) / (good + neutral + bad))
+	return ((good - bad) / All_Stat({good, neutral, bad}))
 }
 const PositivesPerc_Stat = ( {good, neutral, bad} ) => {
-	return (good / (good + neutral + bad) * 100)
+	return (good / All_Stat({good, neutral, bad}) * 100)
 }
 
 const App = () => {
