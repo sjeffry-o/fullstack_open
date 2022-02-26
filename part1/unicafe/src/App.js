@@ -18,6 +18,16 @@ const DisplayStat = (props) => {
 	)
 }
 
+const All_Stat = ( {good, neutral, bad} ) => {
+	return (good - bad)
+}
+const AVG_Stat = ( {good, neutral, bad} ) => {
+	return (All_Stat({good, neutral, bad}) / (good + neutral + bad))
+}
+const PositivesPerc_Stat = ( {good, neutral, bad} ) => {
+	return (good / (good + neutral + bad) * 100)
+}
+
 const App = () => {
   // save clicks of each button to its own state
   const [good, setGood] = useState(0)
@@ -27,6 +37,9 @@ const App = () => {
   return (
     <div>
 	<Header text="give feedback" />
+	{/*<Button onclick={() => setGood(good + 1000338540758753049875834958)} text={"good"} />
+	<Button onclick={() => setNeutral(neutral + 1234546354343593847598)} text={"neutral"} />
+	<Button onclick={() => setBad(bad + 13442363574444)} text={"bad"} />*/}
 	<Button onclick={() => setGood(good + 1)} text={"good"} />
 	<Button onclick={() => setNeutral(neutral + 1)} text={"neutral"} />
 	<Button onclick={() => setBad(bad + 1)} text={"bad"} />
@@ -34,6 +47,9 @@ const App = () => {
 	<DisplayStat text="good" value={good} />
 	<DisplayStat text="neutral" value={neutral} />
 	<DisplayStat text="bad" value={bad} />
+	<DisplayStat text="All" value={All_Stat({good, neutral, bad})} />
+	<DisplayStat text="average" value={AVG_Stat({good, neutral, bad})} />
+	<DisplayStat text="positive" value={PositivesPerc_Stat({good, neutral, bad}) + " %"} />
     </div>
   )
 }
