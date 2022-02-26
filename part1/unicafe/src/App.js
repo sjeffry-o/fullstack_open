@@ -12,9 +12,18 @@ const Button = (props) => {
 	)
 }
 
-const DisplayStat = (props) => {
+/*const DisplayStat = (props) => {
 	return (
 	<p>{props.text} {props.value}</p>
+	)
+}*/
+
+const DisplayStatTable = (props) => {
+	return (
+	<tr>
+		<td>{props.text}</td>
+		<td>{props.value}</td>
+	</tr>
 	)
 }
 
@@ -28,7 +37,7 @@ const PositivesPerc_Stat = ( {good, neutral, bad} ) => {
 	return (good / All_Stat({good, neutral, bad}) * 100)
 }
 
-const Statistics = ( {good, neutral, bad} ) => {
+/*const Statistics = ( {good, neutral, bad} ) => {
 	if (All_Stat({ good,neutral,bad} ) === 0)
 		return (<p>No feedback given</p>)
 	else
@@ -41,6 +50,24 @@ const Statistics = ( {good, neutral, bad} ) => {
 			<DisplayStat text="average" value={AVG_Stat({good, neutral, bad})} />
 			<DisplayStat text="positive" value={PositivesPerc_Stat({good, neutral, bad}) + " %"} />
 		</div>
+		)
+}*/
+
+const StatisticsTable = ( {good, neutral, bad} ) => {
+	if (All_Stat({ good,neutral,bad} ) === 0)
+		return (<p>No feedback given</p>)
+	else
+		return (
+		<table>
+			<tbody>
+			<DisplayStatTable text="good" value={good} />
+			<DisplayStatTable text="neutral" value={neutral} />
+			<DisplayStatTable text="bad" value={bad} />
+			<DisplayStatTable text="All" value={All_Stat({good, neutral, bad})} />
+			<DisplayStatTable text="average" value={AVG_Stat({good, neutral, bad})} />
+			<DisplayStatTable text="positive" value={PositivesPerc_Stat({good, neutral, bad}) + " %"} />
+			</tbody>
+		</table>
 		)
 }
 
@@ -62,7 +89,7 @@ const App = () => {
 	<Button onclick={() => setNeutral(neutral + 1)} text={"neutral"} />
 	<Button onclick={() => setBad(bad + 1)} text={"bad"} />
 	<Header text="statistics" />
-	<Statistics good={good} neutral={neutral} bad={bad} />
+	<StatisticsTable good={good} neutral={neutral} bad={bad} />
     </div>
   )
 }
