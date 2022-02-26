@@ -6,9 +6,7 @@ const random_idx = (max) => {
 
 const Button = (props) => {
 	return (
-	<div>
 		<button onClick={props.onclick}>{props.text}</button>
-	</div>
 	)
 }
 
@@ -22,12 +20,19 @@ const App = () => {
     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients'
   ]
-   
   const [selected, setSelected] = useState(random_idx(anecdotes.length))
-  
+  const [points, setPoints] = useState(Array(anecdotes.length).fill(0))
+  const vote = (idx) => {
+	const copy = { ...points }
+	copy[idx] += 1
+	setPoints(copy)
+  }
+
   return (
     <div>
-	{anecdotes[selected]}
+	<div>{anecdotes[selected]}</div>
+	<div>has {points[selected]} votes</div>
+	<Button onclick={() => {vote(selected)}} text={"vote"} />
 	<Button onclick={() => setSelected(random_idx(anecdotes.length))} text={"next anecdote"} />
     </div>
   )
