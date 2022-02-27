@@ -1,5 +1,11 @@
 import { useState } from 'react'
 
+const Header = (props) => {
+	return (
+	<h1>{props.text}</h1>
+	)
+}
+
 const random_idx = (max) => {
 	return (Math.floor(Math.random() * max))
 }
@@ -7,6 +13,31 @@ const random_idx = (max) => {
 const Button = (props) => {
 	return (
 		<button onClick={props.onclick}>{props.text}</button>
+	)
+}
+
+const maxElemIdx = (points) => {
+	var maxIdx = 0
+	var idx = 0
+
+	while (idx < points.length)
+	{
+		if (points[idx] > points[maxIdx])
+		{
+			maxIdx = idx
+		}
+		idx++
+	}
+	return (maxIdx)
+}
+
+const SelectMostVotesAnecdote = (props) => {
+	const anecs = { ...props.anecdotes }
+	return (
+	<div>
+		<p>{anecs[maxElemIdx(props.points)]}</p>
+		<p>has {props.points[maxElemIdx(props.points)]} votes</p>
+	</div>
 	)
 }
 
@@ -23,17 +54,20 @@ const App = () => {
   const [selected, setSelected] = useState(random_idx(anecdotes.length))
   const [points, setPoints] = useState(Array(anecdotes.length).fill(0))
   const vote = (idx) => {
-	const copy = { ...points }
+	const copy = [ ...points ]
 	copy[idx] += 1
 	setPoints(copy)
   }
 
   return (
     <div>
+	<Header text="Anecdote of the day"/>
 	<div>{anecdotes[selected]}</div>
 	<div>has {points[selected]} votes</div>
 	<Button onclick={() => {vote(selected)}} text={"vote"} />
 	<Button onclick={() => setSelected(random_idx(anecdotes.length))} text={"next anecdote"} />
+	<Header text="Anecdote with the most votes" />
+	<SelectMostVotesAnecdote anecdotes={anecdotes} points={points} />
     </div>
   )
 }
