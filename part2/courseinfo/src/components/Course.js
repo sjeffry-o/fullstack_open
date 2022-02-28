@@ -6,30 +6,24 @@ const Header = (data) => {
 	)
 }
 
-const Part = (data) => {
-	return (
-	<div>
-	      <p>
-		{data.part} {data.exercises}
-	      </p>
-	</div>
-	)
-}
-
 const Content = (data) => {
 	return (
 	<div>
-      		<Part part={data.part1.name} exercises={data.part1.exercises} />
-      		<Part part={data.part2.name} exercises={data.part2.exercises} />
-      		<Part part={data.part3.name} exercises={data.part3.exercises} />
+		{data.parts.map(part => <p key={part.id}>{part.name} {part.exercises}</p>)}
 	</div>
 	)
 }
 
 const Total = (data) => {
+	var initVal = 0;
+	const total = data.parts.reduce((s, p) => {
+		initVal += p.exercises
+  		console.log('what is happening', s, p.exercises)
+		return (initVal)
+	}, initVal)
 	return (
 	<div>
-      	      <p>Number of exercises {data.exercises1 + data.exercises2 + data.exercises3}</p>
+      	      <p>Number of exercises {total}</p>
 	</div>
 	)
 }
@@ -40,10 +34,8 @@ const Course = (props) => {
 	return (
 	<div>
 		<Header course={props.name} />
-		<Content part1={props.parts[0]} part2={props.parts[1]} part3={props.parts[2]}/>
-		<Total exercises1={props.parts[0].exercises} 
-		     exercises2={props.parts[1].exercises} 
-		     exercises3={props.parts[2].exercises} />
+		<Content parts={props.parts} />
+		<Total parts={props.parts} />
 	</div>
 	)
 }
