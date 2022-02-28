@@ -1,7 +1,7 @@
-const Header = (data) => {
+const CourseHeader = (data) => {
 	return (
 	<div>
-      		<h1>{data.course}</h1>
+      		<h2>{data.course}</h2>
 	</div>
 	)
 }
@@ -23,7 +23,7 @@ const Total = (data) => {
 	}, initVal)
 	return (
 	<div>
-      	      <p>Number of exercises {total}</p>
+      	      <p><b>Total of {total} exercises</b></p>
 	</div>
 	)
 }
@@ -33,7 +33,7 @@ const Course = (props) => {
 	props = props.course
 	return (
 	<div>
-		<Header course={props.name} />
+		<CourseHeader course={props.name} />
 		<Content parts={props.parts} />
 		<Total parts={props.parts} />
 	</div>
