@@ -11,7 +11,12 @@ const DisplayFound = (props) => {
 	if (props.found.length > 1)
 		return (
 		<div>
-		{props.found.map(country => <p>{country.name.official}</p>)}
+		{props.found.map(country => <p key={country.name.official}>
+			{country.name.official} 
+			<button onClick={() => {props.querySetter(country.name.official)}}>
+			show
+			</button>
+			</p>)}
 		</div>
 		)
 	if (props.found.length === 1)
@@ -25,7 +30,7 @@ const DisplayFound = (props) => {
 			<p>area {countryInfo.area}</p>
 			<h3>languages:</h3>
 			<ul>
-			{languages.map(language => <li>{language}</li>)}
+			{languages.map(language => <li key={language}>{language}</li>)}
 			</ul>
 			<img src={countryInfo.flags.png} alt="delete" />
 		</div>
@@ -62,7 +67,7 @@ const App = () => {
   return (
 	  <div>
 		<p>find countries: <input onChange={updateCountryQuery}/></p>
-	  	<DisplayFound found={found} />
+	  	<DisplayFound found={found} querySetter={setCountryQuery} />
 	  </div>
   )
 }
