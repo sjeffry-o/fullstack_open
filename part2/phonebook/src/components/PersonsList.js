@@ -9,7 +9,13 @@ const PersonsList = (props) => {
 	if (props.nameFilter === '')
 		return (
 		<div>
-		{props.persons.map(person => <p key={person.id}>{person.name} {person.number} <button onClick={() => handleDelete([person.id, person.name])}>delete</button></p>)}
+			{
+			props.persons.map(person => 
+			<p key={person.id} className='note'>
+			{person.name} {person.number} 
+			<button onClick={() => handleDelete([person.id, person.name])}>delete</button>
+			</p>)
+			}
 		</div>
 		)
 	else

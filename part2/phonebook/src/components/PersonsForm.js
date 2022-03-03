@@ -7,14 +7,26 @@ const PersonsForm = (props) => {
 
   const addPerson = (event) => {
 	  if (props.persons.some(person => person.name === newName))
-		  return alert(`${newName} is already added to phonebook`)
-	  event.preventDefault()
-	  
-	  const new_person = {  name: newName, 
-		  		number: newNumber,
-	  			id: props.persons.length + 1}
-	  noteService.create(new_person)
-	  props.setPersons(props.persons.concat(new_person))
+	  {
+		  if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`))
+		  {
+			  console.log(newName)
+		  }
+	  }
+	  else 
+	  {
+		  event.preventDefault()
+		  
+		  const new_person = {  name: newName, 
+					number: newNumber,
+					id: props.persons.length + 1}
+		  noteService.create(new_person)
+		  props.setPersons(props.persons.concat(new_person))
+		  props.setMessage(`${new_person.name} added`)
+		  setTimeout(() => {
+			  props.setMessage(null)
+			}, 5000)
+	  }
   }
 
   const nameSetting = (event) => {
