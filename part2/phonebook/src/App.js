@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import PersonsList from './components/PersonsList'
 import PersonsForm from './components/PersonsForm'
-import axios from 'axios'
+import personsService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -12,11 +12,12 @@ const App = () => {
   }
 
   const hook = () => {
-	  axios.get('http://localhost:3001/persons').then(
-		  response => {
-			  console.log('promise fullfilled')
-			  setPersons(response.data)
-		  }
+	  personsService.getAll()
+	  .then(
+	  persons => {
+		  console.log('promise fullfilled')
+		  setPersons(persons)
+	  }
 	  )
   }
   useEffect(hook, [])

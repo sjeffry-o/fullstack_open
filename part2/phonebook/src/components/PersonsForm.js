@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import noteService from '../services/persons'
 
 const PersonsForm = (props) => {
   const [newName, setNewName] = useState('')
@@ -12,6 +13,7 @@ const PersonsForm = (props) => {
 	  const new_person = {  name: newName, 
 		  		number: newNumber,
 	  			id: props.persons.length + 1}
+	  noteService.create(new_person)
 	  props.setPersons(props.persons.concat(new_person))
   }
 
