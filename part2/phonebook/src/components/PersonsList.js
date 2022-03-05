@@ -2,7 +2,12 @@ import personsService from '../services/persons'
 
 const handleDelete = (props) => {
 	if (window.confirm(`wanna delete ${props[1]}!?`))
-		personsService.delete_person(props[0])
+		personsService.delete_person(props[0]).catch(error => {
+			props[2](`error: ${props[1]} was already removed from the server`)
+			setTimeout(() => {
+			  props[2](null)
+			}, 5000)
+		})
 }
 
 const PersonsList = (props) => {
@@ -13,7 +18,7 @@ const PersonsList = (props) => {
 			props.persons.map(person => 
 			<p key={person.id} className='note'>
 			{person.name} {person.number} 
-			<button onClick={() => handleDelete([person.id, person.name])}>delete</button>
+			<button onClick={() => handleDelete([person.id, person.name, props.setInfo])}>delete</button>
 			</p>)
 			}
 		</div>
