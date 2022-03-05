@@ -10,7 +10,11 @@ const PersonsForm = (props) => {
 	  {
 		  if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`))
 		  {
-			  console.log(newName)
+			  const our_person = props.persons.filter(
+				  person => person.name === newName
+			  	)[0]
+			  const updated_person = { ...our_person, number:newNumber}
+			  noteService.replace(updated_person)
 		  }
 	  }
 	  else 
