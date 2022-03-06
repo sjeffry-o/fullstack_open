@@ -25,8 +25,14 @@ const parse_writeJson = (filepath, newJson) => {
 const get_person = (id) => {
 	const db = read_parseJson('db.json')
 	const person = db.filter(person => person.id === id)[0]
-	console.log(person)
 	return person
+}
+
+const uniqueName = (name, db) => {
+	if (db.some(person => person.name === name))
+		return (false)
+	else 
+		return (true)
 }
 
 app.get('/api/persons', (request, response) => {
@@ -62,10 +68,16 @@ app.post('/api/persons', (request, response) => {
 	const newId = getRandomInt(1000)
 	const parsed_db = read_parseJson('db.json')
 	const reqInfo = request.body
+
+	if (!reqInfo.name)
+		return response.status(500).send('name is missing').end()
+	if (!reqInfo.number)
+		return response.status(500).send('name is missing').end()
+	if (!uniqueName(reqInfo.name, parsed_db))
+		return response.status(500).send('name must be unique').end()
 	parsed_db.push({id: newId, name: reqInfo.name, number: String(reqInfo.number)})
 	parse_writeJson('db.json', parsed_db)
 	console.log(parsed_db)
-	//parse_writeJson('db.json', parsed_db)
 })
 
 const PORT = 3001
