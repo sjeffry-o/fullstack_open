@@ -1,9 +1,34 @@
+const morgan = require('morgan')
 const express = require('express')
 const fs = require('fs');
 const path = require('path');
 const app = express()
 
 app.use(express.json())
+
+app.use(morgan((tokens, req, res) => {
+  const method = tokens.method(req, res)
+  //console.log(method, typeof method)
+  //console.log(req.body)
+  if (method === 'POST')
+	  return [
+	    tokens.method(req, res),
+	    tokens.url(req, res),
+	    tokens.status(req, res),
+	    tokens.res(req, res, 'content-length'), '-',
+	    tokens['response-time'](req, res), 'ms',
+	    JSON.stringify(req.body)
+	  ].join(' ')
+  else
+	  return [
+	    tokens.method(req, res),
+	    tokens.url(req, res),
+	    tokens.status(req, res),
+	    tokens.res(req, res, 'content-length'), '-',
+	    tokens['response-time'](req, res), 'ms'
+	  ].join(' ')
+}))
+//app.use(morgan('tiny'))
 const http = require('http')
 
 const getRandomInt = (max) => {
