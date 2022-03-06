@@ -40,6 +40,16 @@ app.get('/info', (request, response) => {
 		<p>${new Date().toISOString()}</p>`)
 })
 
+app.delete('/api/persons/delete/:id', (request, response) => {
+	const id = Number(request.params.id)
+	const db = read_parseJson('db.json')
+	const updated_db = db.filter(person => person.id !== id)
+	const json = JSON.stringify(updated_db)
+        const write = fs.writeFileSync('db.json', json)
+	console.log('deletion request on', id, 'done', 'object written', json)
+	console.log(write)
+})
+
 const PORT = 3001
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`)
