@@ -1,8 +1,10 @@
 const morgan = require('morgan')
+require('dotenv').config()
 const express = require('express')
 const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
+const Person = require('./models/Person')
 const app = express()
 
 app.use(express.json())
@@ -64,7 +66,9 @@ const uniqueName = (name, db) => {
 }
 
 app.get('/api/persons', (request, response) => {
-	response.json(read_parseJson('db.json'))
+	Person.find({}).then(persons => {
+		response.json(persons)
+	})
 })
 
 app.get('/api/persons/:id', (request, response) => {
@@ -93,22 +97,25 @@ app.delete('/api/persons/delete/:id', (request, response) => {
 })
 
 app.post('/api/persons', (request, response) => {
-	const newId = getRandomInt(1000)
-	const parsed_db = read_parseJson('db.json')
 	const reqInfo = request.body
 
+	if (!reqInfo)
+		return response.status(400).send({ error: 'content is missing' }).end()
 	if (!reqInfo.name)
-		return response.status(500).send('name is missing').end()
+		return response.status(400).send({ error: 'name is missing' }).end()
 	if (!reqInfo.number)
-		return response.status(500).send('name is missing').end()
-	if (!uniqueName(reqInfo.name, parsed_db))
-		return response.status(500).send('name must be unique').end()
-	parsed_db.push({id: newId, name: reqInfo.name, number: String(reqInfo.number)})
-	parse_writeJson('db.json', parsed_db)
-	console.log(parsed_db)
+		return response.status(400).send({ error: 'name is missing' }).end()
+	
+	const person = new Person({
+		name: reqInfo.name,
+		number: reqInfo.number
+	})
+	person.save().then(savedPerson => {
+		response.json(savedPerson)
+	})
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`)
 })
