@@ -96,10 +96,13 @@ app.get('/api/persons/:id', (request, response) => {
 })
 
 app.get('/info', (request, response) => {
-	const parsed_db = read_parseJson('db.json')
-	response.send(`
-		<p>Phonebook has info for ${parsed_db.length} people</p>
+	Person.count()
+	.then(count => {
+		response.send(`
+		<p>Phonebook has info for ${count} people</p>
 		<p>${new Date().toISOString()}</p>`)
+	})
+	.catch(error => next(error))
 })
 
 app.delete('/api/persons/delete/:id', (request, response) => {
@@ -134,7 +137,7 @@ app.post('/api/persons', (request, response) => {
 	if (!reqInfo.name)
 		return response.status(400).send({ error: 'name is missing' }).end()
 	if (!reqInfo.number)
-		return response.status(400).send({ error: 'name is missing' }).end()
+		return response.status(400).send({ error: 'number is missing' }).end()
 	
 	const person = new Person({
 		name: reqInfo.name,
