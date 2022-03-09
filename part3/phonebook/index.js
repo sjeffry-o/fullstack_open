@@ -7,9 +7,9 @@ const cors = require('cors');
 const Person = require('./models/Person')
 const app = express()
 
+app.use(express.static('build'))
 app.use(express.json())
 app.use(cors())
-app.use(express.static('build'))
 
 app.use(morgan((tokens, req, res) => {
   const method = tokens.method(req, res)
@@ -34,6 +34,16 @@ app.use(morgan((tokens, req, res) => {
 	  ].join(' ')
 }))
 //app.use(morgan('tiny'))
+const errorHandler = (error, request, response, next) => {
+	console.log(error.message)
+
+	if (error.name === 'CastError') {
+		return response.status(400).send({error: 'malformattedd id'})
+	}
+
+	next(error)
+}
+app.use(errorHandler)
 const http = require('http')
 
 const getRandomInt = (max) => {
@@ -72,12 +82,17 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/api/persons/:id', (request, response) => {
-	const id = Number(request.params.id)
-	const person = get_person(id)
-	if (person)
-		response.json(person)
-	else
-		response.status(404).end()
+	Person.findById(request.params.id)
+	.then(person => {
+		if (person)
+			response.json(person)
+		else
+			response.status(404).end()
+	})
+	.catch(error => {
+		console.log(error)
+		response.status(400).send({ error: 'malformatted id' })
+	})
 })
 
 app.get('/info', (request, response) => {
@@ -88,12 +103,27 @@ app.get('/info', (request, response) => {
 })
 
 app.delete('/api/persons/delete/:id', (request, response) => {
-	const id = Number(request.params.id)
-	const db = read_parseJson('db.json')
-	const updated_db = db.filter(person => person.id !== id)
-	parse_writeJson('db.json', updated_db)
-	console.log('deletion request on', id, 'done', 'object written', json)
-	console.log(write)
+	Person.findByIdAndRemove(request.params.id)
+	.then(result => {
+		response.status(204).end()
+	})
+	.catch(error => next(error))
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
+	const body = request.body
+
+	console.log(body)
+	const person = {
+		name: body.name,
+		number: body.number
+	}
+
+	Person.findByIdAndUpdate(request.params.id, body, { new: true })
+	.then(updatedPerson => {
+		response.json(updatedPerson)
+	})
+	.catch(error => next(error))
 })
 
 app.post('/api/persons', (request, response) => {
