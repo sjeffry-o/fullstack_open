@@ -39,6 +39,8 @@ const errorHandler = (error, request, response, next) => {
 
 	if (error.name === 'CastError') {
 		return response.status(400).send({error: 'malformattedd id'})
+	} else if (error.name === 'ValidationError') {
+		return response.status(400).send({error: error.message})
 	}
 
 	next(error)
@@ -122,22 +124,18 @@ app.put('/api/persons/:id', (request, response, next) => {
 		number: body.number
 	}
 
-	Person.findByIdAndUpdate(request.params.id, body, { new: true })
+	Person.findByIdAndUpdate(request.params.id, body, { new: true, runValidators: true })
 	.then(updatedPerson => {
 		response.json(updatedPerson)
 	})
 	.catch(error => next(error))
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
 	const reqInfo = request.body
 
 	if (!reqInfo)
 		return response.status(400).send({ error: 'content is missing' }).end()
-	if (!reqInfo.name)
-		return response.status(400).send({ error: 'name is missing' }).end()
-	if (!reqInfo.number)
-		return response.status(400).send({ error: 'number is missing' }).end()
 	
 	const person = new Person({
 		name: reqInfo.name,
@@ -146,6 +144,7 @@ app.post('/api/persons', (request, response) => {
 	person.save().then(savedPerson => {
 		response.json(savedPerson)
 	})
+	.catch(error => next(error))
 })
 
 const PORT = process.env.PORT
