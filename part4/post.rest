@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs HTTP/1.1
+Accept: application/json
+Content-Type: application/json
+Content-Length: 60
+
+{
+  "title": "how to bury a man",
+  "main_text": "don't"
+}
