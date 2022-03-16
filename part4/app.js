@@ -4,6 +4,9 @@ const app = express()
 const mongoose = require('mongoose')
 const logger = require('./utils/logger')
 const config = require('./utils/config')
+const Blog = require('./models/blog')
+const loginRouter = require('./controllers/login')
+const usersRouter = require('./controllers/users')
 
 const mongoUrl = config.MONGODB_URL
 mongoose.connect(mongoUrl)
@@ -13,25 +16,10 @@ mongoose.connect(mongoUrl)
     logger.error('Error happened while trying connect to MongoDB:', error) 
   })
 
-const blogSchema = new mongoose.Schema({
-  title: String,
-  author: String,
-  url: String,
-  likes: Number
-})
-
-blogSchema.set('toJSON', {
-  transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString()
-    delete returnedObject._id
-    delete returnedObject.__v
-  }
-})
-
-const Blog = mongoose.model('Blog', blogSchema)
-
 app.use(cors())
 app.use(express.json())
+app.use('/api/login', loginRouter)
+app.use('/api/users', usersRouter)
 
 app.get('/api/blogs', (request, response) => {
   Blog
