@@ -15,6 +15,9 @@ const LoginForm = (props) => {
       props.setUser(user)
       props.setUsername('')
       props.setPassword('')
+      window.localStorage.setItem(
+        'loggedBlogAppUser', JSON.stringify(user)
+      )
       console.log('logged in with', props.username, props.password)
     } catch (exception) {
       props.setErrorMessage('Wrong credentials')
@@ -63,6 +66,16 @@ const App = () => {
       setBlogs( blogs )
     )  
   }, [])
+
+  useEffect(() => {
+    const loggedUserJson = window.localStorage.getItem('loggedBlogAppUser')
+    if (loggedUserJson) 
+    {
+      const user = JSON.parse(loggedUserJson)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
+  }, [])
   
   if (user === null)
     return (
@@ -78,7 +91,7 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} user={user} />
       )}
     </div>
   )
