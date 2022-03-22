@@ -1,9 +1,8 @@
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog }) => {
   return (
     <div>
-      <p>{user.name} logged in <button onClick={window.localStorage.removeItem('loggedBlogAppUser')}>log out</button></p> 
       <div>
-        {blog.title} {blog.author}
+        {blog.title} {blog.author} {blog.url}
       </div>
     </div>
   )

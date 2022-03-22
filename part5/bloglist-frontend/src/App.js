@@ -54,12 +54,53 @@ const LoginForm = (props) => {
   )
 }
 
+const NewBlog = (props) => {
+  return (
+    <div>
+        <div>
+          title:
+            <input
+            type="text"
+            value={props.newBlogTitle}
+            name="Title"
+            onChange={({ target }) => props.setNewBlogTitle(target.value)}
+          />
+        </div>
+        <div>
+          author:
+            <input
+            type="text"
+            value={props.newBlogAuthor}
+            name="Author"
+            onChange={({ target }) => props.setNewBlogAuthor(target.value)}
+          />
+        </div>
+        <div>
+          url:
+            <input
+            type="text"
+            value={props.newBlogUrl}
+            name="URL"
+            onChange={({ target }) => props.setNewBlogUrl(target.value)}
+          />
+        </div>
+      <button onClick={() => {blogService.create({url:props.newBlogUrl,
+                                           title:props.newBlogTitle,
+                                           author:props.newBlogAuthor})}}>create</button>
+    </div>
+  )
+}
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState('')
+
+  const [newBlogUrl, setNewBlogUrl] = useState('')
+  const [newBlogTitle, setNewBlogTitle] = useState('')
+  const [newBlogAuthor, setNewBlogAuthor] = useState('')
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -90,6 +131,12 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <p>{user.name} logged in <button onClick={window.localStorage.removeItem('loggedBlogAppUser')}>log out</button></p> 
+      <h2>create new</h2>
+      <NewBlog newBlogAuthor={newBlogAuthor} setNewBlogAuthor={setNewBlogAuthor}
+               newBlogTitle={newBlogTitle} setNewBlogTitle={setNewBlogTitle}
+               newBlogUrl={newBlogUrl} setNewBlogUrl={setNewBlogUrl}
+               token={user.token}/>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} user={user} />
       )}
