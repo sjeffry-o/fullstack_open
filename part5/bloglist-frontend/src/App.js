@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import './index.css'
 
 const LoginForm = (props) => {
   const handleLogin = async (event) => {
@@ -29,6 +30,7 @@ const LoginForm = (props) => {
   return (
     <div>
       <h1>log in to app</h1>
+      <MessageField errorMessage={props.errorMessage}/>
       <form onSubmit={handleLogin}>
         <div>
           username
@@ -50,6 +52,25 @@ const LoginForm = (props) => {
         </div>
         <button type="submit">login</button>
       </form>
+    </div>
+  )
+}
+
+const MessageField = (props) => {
+  if (props.errorMessage)
+    return (
+      <div className='error'>
+        {props.errorMessage}
+      </div>
+    )
+  if (props.infoMessage)
+    return (
+        <div className='info'>
+          {props.infoMessage}
+        </div>
+    )
+  return (
+    <div>
     </div>
   )
 }
@@ -84,9 +105,14 @@ const NewBlog = (props) => {
             onChange={({ target }) => props.setNewBlogUrl(target.value)}
           />
         </div>
-      <button onClick={() => {blogService.create({url:props.newBlogUrl,
-                                           title:props.newBlogTitle,
-                                           author:props.newBlogAuthor})}}>create</button>
+      <button onClick={() => {
+                    blogService.create({url:props.newBlogUrl,
+                                     title:props.newBlogTitle,
+                                     author:props.newBlogAuthor})
+                    props.setInfoMessage(`a new blog '${props.newBlogTitle}' by ${props.newBlogAuthor} added`)
+                    setTimeout(() => {
+                      props.setInfoMessage(null)
+                    }, 5000)}}>create</button>
     </div>
   )
 }
@@ -96,7 +122,8 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [infoMessage, setInfoMessage] = useState(null)
 
   const [newBlogUrl, setNewBlogUrl] = useState('')
   const [newBlogTitle, setNewBlogTitle] = useState('')
@@ -125,18 +152,20 @@ const App = () => {
                    password={password} setPassword={setPassword}
                    setErrorMessage={setErrorMessage}
                    setUser={setUser} setBlogs={setBlogs}
+                   errorMessage={errorMessage}
                    />
       </div>
     )
   return (
     <div>
       <h2>blogs</h2>
+      <MessageField infoMessage={infoMessage}/>
       <p>{user.name} logged in <button onClick={window.localStorage.removeItem('loggedBlogAppUser')}>log out</button></p> 
       <h2>create new</h2>
       <NewBlog newBlogAuthor={newBlogAuthor} setNewBlogAuthor={setNewBlogAuthor}
                newBlogTitle={newBlogTitle} setNewBlogTitle={setNewBlogTitle}
                newBlogUrl={newBlogUrl} setNewBlogUrl={setNewBlogUrl}
-               token={user.token}/>
+               token={user.token} setInfoMessage={setInfoMessage}/>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} user={user} />
       )}
