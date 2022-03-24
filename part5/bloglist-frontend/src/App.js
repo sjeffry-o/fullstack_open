@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import './index.css'
@@ -112,7 +113,12 @@ const NewBlog = (props) => {
                     props.setInfoMessage(`a new blog '${props.newBlogTitle}' by ${props.newBlogAuthor} added`)
                     setTimeout(() => {
                       props.setInfoMessage(null)
-                    }, 5000)}}>create</button>
+                    }, 5000)
+                    props.setNewBlogTitle('')
+                    props.setNewBlogAuthor('')
+                    props.setNewBlogUrl('')
+                    props.newBlogRef.current.toggleVisibility()
+      }}>create</button>
     </div>
   )
 }
@@ -128,6 +134,8 @@ const App = () => {
   const [newBlogUrl, setNewBlogUrl] = useState('')
   const [newBlogTitle, setNewBlogTitle] = useState('')
   const [newBlogAuthor, setNewBlogAuthor] = useState('')
+
+  const newBlogRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -162,10 +170,13 @@ const App = () => {
       <MessageField infoMessage={infoMessage}/>
       <p>{user.name} logged in <button onClick={window.localStorage.removeItem('loggedBlogAppUser')}>log out</button></p> 
       <h2>create new</h2>
-      <NewBlog newBlogAuthor={newBlogAuthor} setNewBlogAuthor={setNewBlogAuthor}
-               newBlogTitle={newBlogTitle} setNewBlogTitle={setNewBlogTitle}
-               newBlogUrl={newBlogUrl} setNewBlogUrl={setNewBlogUrl}
-               token={user.token} setInfoMessage={setInfoMessage}/>
+      <Togglable buttonLabel='new blog' ref={newBlogRef}>
+        <NewBlog newBlogAuthor={newBlogAuthor} setNewBlogAuthor={setNewBlogAuthor}
+                 newBlogTitle={newBlogTitle} setNewBlogTitle={setNewBlogTitle}
+                 newBlogUrl={newBlogUrl} setNewBlogUrl={setNewBlogUrl}
+                 token={user.token} setInfoMessage={setInfoMessage}
+                 newBlogRef={newBlogRef}/>
+      </Togglable>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} user={user} />
       )}
