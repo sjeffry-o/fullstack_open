@@ -1,8 +1,10 @@
-const Blog = ({ blog }) => {
+const Blog = ({ key, blog, user }) => {
   return (
     <div>
       <div>
-        {blog.title} {blog.author} {blog.url}
+        {blog.url}
+        <br></br>likes: {blog.likes ? blog.likes : 0} <button>like</button>
+        <br></br>{user.name}
       </div>
     </div>
   )

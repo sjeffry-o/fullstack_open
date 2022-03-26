@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import NewBlog from './components/NewBlog'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
+import TogglableBlog from './components/TogglableBlog'
 import blogService from './services/blogs'
 import MessageField from './components/MessageField'
 import './index.css'
@@ -20,6 +21,7 @@ const App = () => {
   const [newBlogAuthor, setNewBlogAuthor] = useState('')
 
   const newBlogRef = useRef()
+  const blogRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -62,7 +64,9 @@ const App = () => {
                  newBlogRef={newBlogRef}/>
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} user={user} />
+        <TogglableBlog blog={blog} buttonLabel='show' ref={blogRef}>
+          <Blog key={blog.id} blog={blog} user={user} />
+        </TogglableBlog>
       )}
     </div>
   )
