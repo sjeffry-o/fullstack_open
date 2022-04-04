@@ -1,4 +1,5 @@
 import loginService from '../services/login'
+import blogsService from '../services/blogs'
 import MessageField from '../components/MessageField'
 
 const LoginForm = (props) => {
@@ -11,6 +12,7 @@ const LoginForm = (props) => {
         username, password,
       })
       props.setUser(user)
+      blogsService.setToken(user.token)
       props.setUsername('')
       props.setPassword('')
       window.localStorage.setItem(
