@@ -28,5 +28,13 @@ const replace = async newObject => {
   return response.data
 }
 
-let moduleExport = { getAll, create, replace, setToken }
+const remove = async id => {
+  const config = {
+    headers: { Authorization: token },
+  }
+  const response = await axios.delete(baseUrl + `/${id}`, config)
+  return response.data
+}
+
+let moduleExport = { getAll, create, replace, remove, setToken }
 export default moduleExport
