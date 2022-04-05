@@ -1,6 +1,7 @@
 import blogsService from '../services/blogs'
+import PropTypes from 'prop-types'
 
-const Blog = ({ blog, user, blogs, setBlogs }) => {
+const Blog = ({ blog, blogs, setBlogs }) => {
   const handleLike = (event) => {
     event.preventDefault()
     const likedUser = {...blog, likes: (blog.likes ? blog.likes + 1 : 1), user:blog.user.id}
@@ -24,11 +25,17 @@ const Blog = ({ blog, user, blogs, setBlogs }) => {
       <div>
         {blog.url}
         <br></br>likes: {blog.likes ? blog.likes : 0} <button onClick={handleLike}>like</button>
-        <br></br>{user.name}
+        <br></br>{blog.user.name}
         <br></br><button onClick={handleRemove}>remove</button>
       </div>
     </div>
   )
+}
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  blogs: PropTypes.array.isRequired,
+  setBlogs: PropTypes.func.isRequired,
 }
 
 export default Blog
