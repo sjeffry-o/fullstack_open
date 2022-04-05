@@ -43,6 +43,7 @@ blogsRouter.post('/', async (request, response) => {
     title,
     author,
     url,
+    likes: 0,
     date: new Date(),
     user: user._id
   })
@@ -60,15 +61,10 @@ blogsRouter.delete('/:id', async (request, response) => {
   response.status(204).end()
 })
 
-blogsRouter.put('/:id', async (request, response) => {
-  const { title, author, url } = request.body
+blogsRouter.put('/:id', async (request, response, next) => {
+  const newBlog = request.body
 
-  const blog = {
-    content: body.content,
-    important: body.important,
-  }
-
-  Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+  Blog.findByIdAndUpdate(request.params.id, newBlog, { new: true })
     .then(updatedBlog => {
       response.json(updatedBlog)
     })
