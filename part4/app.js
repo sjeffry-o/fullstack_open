@@ -11,6 +11,7 @@ const middleware = require('./utils/middleware')
 const loginRouter = require('./controllers/login')
 const blogsRouter = require('./controllers/blogs')
 const usersRouter = require('./controllers/users')
+const testingRouter = require('./controllers/testing')
 
 const mongoUrl = config.MONGODB_URL
 mongoose.connect(mongoUrl)
@@ -27,6 +28,7 @@ app.use(middleware.requestLogger)
 app.use('/api/login', loginRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/blogs', blogsRouter)
+app.use('/api/testing', testingRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
