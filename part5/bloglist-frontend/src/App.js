@@ -45,8 +45,7 @@ const App = () => {
         <LoginForm username={username} setUsername={setUsername}
                    password={password} setPassword={setPassword}
                    setErrorMessage={setErrorMessage}
-                   setUser={setUser} setBlogs={setBlogs}
-                   errorMessage={errorMessage}
+                   setUser={setUser} errorMessage={errorMessage}
                    />
       </div>
     )
@@ -60,8 +59,8 @@ const App = () => {
         <NewBlog newBlogAuthor={newBlogAuthor} setNewBlogAuthor={setNewBlogAuthor}
                  newBlogTitle={newBlogTitle} setNewBlogTitle={setNewBlogTitle}
                  newBlogUrl={newBlogUrl} setNewBlogUrl={setNewBlogUrl}
-                 token={user.token} setInfoMessage={setInfoMessage}
-                 newBlogRef={newBlogRef}/>
+                 token={user.token} setInfoMessage={setInfoMessage} user={user}
+                 newBlogRef={newBlogRef} setBlogs={setBlogs} blogs={blogs}/>
       </Togglable>
       {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
         <TogglableBlog blog={blog} buttonLabel='show' ref={blogRef}>
