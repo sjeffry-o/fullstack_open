@@ -27,4 +27,25 @@ describe('Blog app', function() {
       cy.contains('Wrong credentials')
     })
   })
+
+  describe('When logged in', function() {
+    beforeEach(function() {
+      cy.get('#username').type('root')
+      cy.get('#password').type('salainen')
+      cy.get('#login-button').click()
+    })
+
+    it('A blog can be created', function() {
+      cy.contains('new blog').click()
+
+      cy.get('#author').type('Solnche')
+      cy.get('#title').type('Finally')
+      cy.get('#url').type('rooot.com')
+
+      cy.get('#createButton').click()
+      cy.contains('added')
+      cy.get('#showButton').click()
+      cy.contains('remove').click()
+    })
+  })
 })

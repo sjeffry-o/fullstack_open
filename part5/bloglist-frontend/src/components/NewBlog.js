@@ -53,7 +53,7 @@ const NewBlog = (props) => {
             onChange={({ target }) => props.setNewBlogUrl(target.value)}
           />
         </div>
-      <button onClick={handleBlogAdd}>create</button>
+      <button id="createButton" onClick={handleBlogAdd}>create</button>
     </div>
   )
 }
