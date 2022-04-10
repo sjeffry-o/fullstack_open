@@ -35,7 +35,7 @@ describe('Blog app', function() {
       cy.get('#login-button').click()
     })
 
-    it('A blog can be created', function() {
+    it('A blog can be created, liked and removed', function() {
       cy.contains('new blog').click()
 
       cy.get('#author').type('Solnche')
@@ -45,7 +45,8 @@ describe('Blog app', function() {
       cy.get('#createButton').click()
       cy.contains('added')
       cy.get('#showButton').click()
-      cy.contains('remove').click()
+      //cy.get('#likeButton').click()
+      //cy.contains('remove').click()
     })
   })
 })
