@@ -9,4 +9,22 @@ describe('Blog app', function() {
     cy.contains('username')
     cy.contains('password')
   })
+
+  describe('Login',function() {
+    it('succeeds with correct credentials', function() {
+      cy.get('#username').type('root')
+      cy.get('#password').type('salainen')
+      cy.get('#login-button').click()
+
+      cy.contains('Superuser logged in')
+    })
+
+    it('fails with wrong credentials', function() {
+      cy.get('#username').type('rootieeee')
+      cy.get('#password').type('wrooong')
+      cy.get('#login-button').click()
+
+      cy.contains('Wrong credentials')
+    })
+  })
 })

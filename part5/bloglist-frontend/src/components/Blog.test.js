@@ -44,4 +44,11 @@ describe('<Blog />', () => {
     expect(div).not.toHaveStyle('display: none')
   })
 
+  test('after clicking like button 2 times, handler called 2 times too', () => {
+    const button = screen.getByText('like')
+    const attrib = Object.getOwnPropertyNames(button)
+    const onClickFunc = button[attrib[1]].onClick
+    userEvent.click(button)
+    expect(onClickFunc).toHaveBeenCalledTimes(1)
+  })
 })
